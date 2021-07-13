@@ -1,5 +1,5 @@
 # Anime-Data
-Gives you every anime details. Made by scraping gogoanime
+Gives you every anime details, including anime schedule for a week.
 
 ## Usage  
 ```npm install @dovakiin0/anime-data```
