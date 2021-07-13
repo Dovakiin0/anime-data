@@ -1,0 +1,24 @@
+{
+  "name": "@dovakiin0/anime-data",
+  "version": "1.0.0",
+  "description": "Every anime data you need",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dovakiin0/anime-data.git"
+  },
+  "author": "Dovakiin0",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dovakiin0/anime-data/issues"
+  },
+  "homepage": "https://github.com/Dovakiin0/anime-data#readme"
+}
