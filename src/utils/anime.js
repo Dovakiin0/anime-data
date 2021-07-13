@@ -256,3 +256,5 @@ class AnimeData {
     }
   }
 }
+
+module.exports = AnimeData;
