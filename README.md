@@ -2,7 +2,9 @@
 Gives you every anime details, including anime schedule for a week.
 
 ## Usage  
-```npm install @dovakiin0/anime-data```
+```
+npm install @dovakiin0/anime-data
+```
 
 **Basic Usage**
 ```js
