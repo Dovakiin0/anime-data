@@ -2,7 +2,9 @@
 Gives you every anime details. Made by scraping gogoanime
 
 ## Usage  
-`npm install @dovakiin0/anime-data`
+```
+npm install @dovakiin0/anime-data
+```
 
 **Basic Usage**
 ```js
@@ -47,6 +49,24 @@ anime
     console.log(res);
   })
   .catch((err) => console.log(err));
+```
+
+**Get Anime By Genre**
+```js
+/* Get all genre */
+anime.getAllGenre()
+  .then((genres)=>console.log(genres))
+  .catch(err=>console.log(err))
+/* [
+  'Action',        'Adventure',    'Cars',
+  'Comedy',        'Dementia',     'Demons',
+  'Drama',         'Dub',          'Ecchi', ...]
+  */
+// Get anime by genre
+anime.getAnimeGenre("Action") // you can pass page parameter, default page is 1
+  .then((animes)=>console.log(animes))
+  .catch((err)=>console.log(err))
+// Returns a list of anime with 'Action" genre
 ```
 
 ## Contributing

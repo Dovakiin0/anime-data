@@ -1,6 +1,3 @@
-const { default: axios } = require("axios");
-const cheerio = require("cheerio");
-
 /**
  * MIT License
  *Copyright (c) 2021 Bishal Subedi
@@ -24,31 +21,29 @@ const cheerio = require("cheerio");
  *SOFTWARE.
  */
 
-/**
- * Scrapes Anime from Gogoanime
- * @example
- * const anime = new AnimeData();
- *anime
- *  .searchAnime("oregairu")
- * .then((res) => {
- *   // console.log(res)
- *   // list of anime that matches the search
- *   anime.getAnimeInfo(res[0].link).then((info) => {
- *     // console.log(info);
- *     // Anime details
- *     anime.getEpisode(info.slug, 1).then((episode) =>
- *      // gets the specific episode of the anime
- *      console.log(episode)
- *    );
- *   });
- * })
- * .catch((err) => console.log(err));
- */
+const { default: axios } = require("axios");
+const cheerio = require("cheerio");
+
 class AnimeData {
   /**
-   * @constructor
+   * Scrapes Anime from Gogoanime
    * @example
-   * const anime = new AnimeData()
+   * const anime = new AnimeData();
+   *anime
+   *  .searchAnime("oregairu")
+   * .then((res) => {
+   *   // console.log(res)
+   *   // list of anime that matches the search
+   *   anime.getAnimeInfo(res[0].link).then((info) => {
+   *     // console.log(info);
+   *     // Anime details
+   *     anime.getEpisode(info.slug, 1).then((episode) =>
+   *      // gets the specific episode of the anime
+   *      console.log(episode)
+   *    );
+   *   });
+   * })
+   * .catch((err) => console.log(err));
    */
   constructor() {
     this.BASE_URI = "https://www1.gogoanime.ai";
@@ -57,7 +52,7 @@ class AnimeData {
   /**
    * Get recent anime
    * @param {int} page - (Optional) Page number of recent anime
-   * @return {Array} Returns an Array of object of recent anime
+   * @return {Promise} Returns an Array of object of recent anime
    */
   async getRecent(page = 1) {
     try {
@@ -90,7 +85,7 @@ class AnimeData {
   /**
    * Get Popular Anime
    * @param {int} page - (Optional) Page number of recent anime
-   * @return {Array} Returns an Array of object of recent anime
+   * @return {Promise} Returns an Array of object of recent anime
    */
   async getPopular(page = 1) {
     try {
@@ -126,7 +121,7 @@ class AnimeData {
   /**
    * Get an anime info
    * @param {string} link - Provide the link to fetch an anime information
-   * @return {Object} Returns an object containing anime information
+   * @return {Promise} Returns an object containing anime information
    */
   async getAnimeInfo(link) {
     if (!link) {
@@ -158,10 +153,7 @@ class AnimeData {
           $(el)
             .children("a")
             .each((i, el) => {
-              genre.push({
-                link: $(el).attr("href"),
-                title: $(el).attr("title"),
-              });
+              genre.push($(el).attr("title"));
             });
           anime_info[key] = genre || null;
         } else anime_info[key] = $temp("a").text().trim() || null;
@@ -178,7 +170,7 @@ class AnimeData {
    * Gets episode detail of an anime
    * @param {string} slug - provide anime slug (e.g. "one-piece"), you can get slug from fetching anime details
    * @param {int} ep - provide episode number
-   * @returns {Object} returns object containing episode details
+   * @returns {Promise} returns object containing episode details
    */
   async getEpisode(slug, ep) {
     if (!ep) throw new Error("Episode Number Not Provided");
@@ -219,7 +211,7 @@ class AnimeData {
   /**
    * Search using name of anime
    * @param {string} name - name of the anime
-   * @returns {Array} returns array of matching anime details
+   * @returns {Promise} returns array of matching anime details
    */
   async searchAnime(name) {
     if (!name) throw new Error("Anime name not provided");
@@ -251,6 +243,58 @@ class AnimeData {
         });
       });
       return searched_animes;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  /**
+   * Retrive all genre
+   * @returns {Promise} returns a list of all genres
+   */
+  async getAllGenre() {
+    try {
+      const { data } = await axios.get(`${this.BASE_URI}`);
+      const $ = cheerio.load(data);
+      const list_genre = [];
+      $("nav.menu_series.genre.right ul li").each((i, el) => {
+        list_genre.push($(el).children("a").attr("title"));
+      });
+      return list_genre;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  /**
+   * Retrive anime based on Genre
+   * @param {strin} name - Name of the genre
+   * @param {int} page - (Optional) fetch by page number, default = 1
+   */
+  async getAnimeGenre(name, page = 1) {
+    if (!name) throw new Error("No Genre name provided");
+    try {
+      let genre_anime = [];
+      const { data } = await axios.get(
+        `${this.BASE_URI}/genre/${name.toLowerCase()}?page=${page}`
+      );
+      const $ = cheerio.load(data);
+      $(".items")
+        .children("li")
+        .each(function () {
+          let link =
+            $(this).children(".img").children("a").attr("href") || null;
+          let img =
+            $(this)
+              .children(".img")
+              .children("a")
+              .children("img")
+              .attr("src") || null;
+          let name = $(this).children(".name").text() || null;
+          let release = $(this).children(".released").text().trim() || null;
+          genre_anime.push({ link, img, name, release });
+        });
+      return genre_anime;
     } catch (err) {
       console.error(err);
     }

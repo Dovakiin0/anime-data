@@ -1,6 +1,6 @@
 {
   "name": "@dovakiin0/anime-data",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Every anime data you need",
   "main": "src/index.js",
   "dependencies": {
