@@ -6,7 +6,7 @@ Gives you every anime details. Made by scraping gogoanime
 
 **Basic Usage**
 ```js
-const AnimeData = require("@dovakiin0/anime-data");
+const {AnimeData} = require("@dovakiin0/anime-data");
 
 const anime = new AnimeData();
 anime
@@ -65,6 +65,26 @@ anime.getAnimeGenre("Action") // you can pass page parameter, default page is 1
   .then((animes)=>console.log(animes))
   .catch((err)=>console.log(err))
 // Returns a list of anime with 'Action" genre
+```
+
+**Anime Schedule**
+```js
+const {AnimeSchedule} = require("@dovakiin0/anime-data")
+const schedule = new AnimeSchedule();
+schedule
+  .getSchedule() // (Optional) pass day to get specific day. e.g. "monday", "tuesday"
+  .then((anime) => console.log(anime))
+  .catch((err) => console.log(err));
+/*
+Format
+saturday: [{
+  title: 
+  img: 
+  episode: 
+  airing_time: 
+}],
+
+*/
 ```
 
 ## Contributing
