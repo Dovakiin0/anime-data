@@ -131,7 +131,7 @@ class AnimeData {
       let anime_info = {};
       const { data } = await axios.get(`${this.BASE_URI}${link}`);
       const $ = cheerio.load(data);
-      anime_info["img"] = $("img").attr("src") || null;
+      anime_info["img"] = $("div.anime_info_body_bg img").attr("src") || null;
       anime_info["title"] = $("h1").text() || null;
       anime_info["slug"] = link.replace(/\/category\//g, "");
       $("div.anime_info_body p.type").each(function (i, el) {
