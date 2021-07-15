@@ -309,6 +309,3 @@ class AnimeData {
 }
 
 module.exports = AnimeData;
-
-const anime = new AnimeData();
-anime.getRecent().then((d) => console.log(d));
