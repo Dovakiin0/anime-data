@@ -74,6 +74,13 @@ class AnimeData {
             name: $(this).children(".name").text(),
             recent_episode: $(this).children(".episode").text(),
             link: $(this).children(".img").children("a").attr("href"),
+            href:
+              "/category" +
+              $(this)
+                .children(".img")
+                .children("a")
+                .attr("href")
+                .replace(/-ep(.*)/g, ""),
           });
         });
       return animes;
@@ -302,3 +309,6 @@ class AnimeData {
 }
 
 module.exports = AnimeData;
+
+const anime = new AnimeData();
+anime.getRecent().then((d) => console.log(d));
