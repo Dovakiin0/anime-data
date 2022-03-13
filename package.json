@@ -1,13 +1,13 @@
 {
   "name": "@dovakiin0/anime-data",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Every anime data you need",
   "main": "src/index.js",
   "dependencies": {
     "axios": "^0.21.1",
-    "cheerio": "^1.0.0-rc.10"
+    "cheerio": "^1.0.0-rc.10",
+    "puppeteer": "^13.5.1"
   },
-  "devDependencies": {},
   "keywords": [
     "anime-scraper",
     "anime-api",
