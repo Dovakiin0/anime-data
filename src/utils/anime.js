@@ -345,7 +345,7 @@ class AnimeData {
 
 module.exports = AnimeData;
 
-const ep = new AnimeData();
-ep.getEpisodeFix("grand-blue")
-  .then((res) => console.log(res))
-  .catch((err) => console.log(err));
+// const ep = new AnimeData();
+// ep.getEpisodeFix("grand-blue")
+//   .then((res) => console.log(res))
+//   .catch((err) => console.log(err));
