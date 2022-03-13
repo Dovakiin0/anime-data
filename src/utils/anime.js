@@ -314,7 +314,6 @@ class AnimeData {
    * @returns {Promise} returns object containing episode details
    */
   async getEpisodeFix(slug) {
-    if (!ep) throw new Error("Episode Number Not Provided");
     if (!slug) throw new Error("Slug Not Provided");
     try {
       const browser = await puppeteer.launch({ headless: true });
@@ -345,3 +344,8 @@ class AnimeData {
 }
 
 module.exports = AnimeData;
+
+const ep = new AnimeData();
+ep.getEpisodeFix("grand-blue")
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
