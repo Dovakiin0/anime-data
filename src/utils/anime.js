@@ -23,6 +23,7 @@
 
 const { default: axios } = require("axios");
 const cheerio = require("cheerio");
+const puppeteer = require("puppeteer");
 
 class AnimeData {
   /**
@@ -306,6 +307,45 @@ class AnimeData {
       console.error(err);
     }
   }
+
+  /**
+   * Gets episode detail of an anime
+   * @param {string} slug - provide anime slug (e.g. "oregairu"), you can get slug from fetching anime details
+   * @returns {Promise} returns object containing episode details
+   */
+  async getEpisodeFix(slug) {
+    if (!ep) throw new Error("Episode Number Not Provided");
+    if (!slug) throw new Error("Slug Not Provided");
+    try {
+      const browser = await puppeteer.launch({ headless: true });
+      const page = await browser.newPage();
+      await page.goto(`https://animeflix.city/movie/${slug}/`, {
+        waitUntil: "networkidle2",
+      });
+      // if ($("h2").text() == "ANIME LIST") {
+      //   throw new Error("No such episode found!");
+      // }
+
+      let data = await page.evaluate(() => {
+        let div_links = document.querySelectorAll("ul#episode_related li");
+        let links = [...div_links].map((el) => {
+          return {
+            ep: el.querySelector("a").getAttribute("data-order"),
+            link: el.querySelector("a").getAttribute("data-src"),
+          };
+        });
+        return links;
+      });
+      await browser.close();
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
 
 module.exports = AnimeData;
+const ep = new AnimeData();
+ep.getEpisodeFix("one-piece")
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err));
