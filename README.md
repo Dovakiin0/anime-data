@@ -1,14 +1,17 @@
 # Anime-Data
+
 Gives you every anime details, including anime schedule for a week.
 
-## Usage  
+## Usage
+
 ```
 npm install @dovakiin0/anime-data
 ```
 
 **Basic Usage**
+
 ```js
-const {AnimeData} = require("@dovakiin0/anime-data");
+const { AnimeData } = require("@dovakiin0/anime-data");
 
 const anime = new AnimeData();
 anime
@@ -29,6 +32,7 @@ anime
 ```
 
 **Get Popular Anime**
+
 ```js
 const anime = new AnimeData();
 anime
@@ -37,10 +41,10 @@ anime
     console.log(res);
   })
   .catch((err) => console.log(err));
-
 ```
 
 **Get Recent Anime**
+
 ```js
 const anime = new AnimeData();
 anime
@@ -52,26 +56,30 @@ anime
 ```
 
 **Get Anime By Genre**
+
 ```js
 /* Get all genre */
-anime.getAllGenre()
-  .then((genres)=>console.log(genres))
-  .catch(err=>console.log(err))
+anime
+  .getAllGenre()
+  .then((genres) => console.log(genres))
+  .catch((err) => console.log(err));
 /* [
   'Action',        'Adventure',    'Cars',
   'Comedy',        'Dementia',     'Demons',
   'Drama',         'Dub',          'Ecchi', ...]
   */
 // Get anime by genre
-anime.getAnimeGenre("Action") // you can pass page parameter, default page is 1
-  .then((animes)=>console.log(animes))
-  .catch((err)=>console.log(err))
+anime
+  .getAnimeGenre("Action") // you can pass page parameter, default page is 1
+  .then((animes) => console.log(animes))
+  .catch((err) => console.log(err));
 // Returns a list of anime with 'Action" genre
 ```
 
 **Anime Schedule**
+
 ```js
-const {AnimeSchedule} = require("@dovakiin0/anime-data")
+const { AnimeSchedule } = require("@dovakiin0/anime-data");
 const schedule = new AnimeSchedule();
 schedule
   .getSchedule() // (Optional) pass day to get specific day. e.g. "monday", "tuesday"
@@ -90,7 +98,9 @@ saturday: [{
 ```
 
 ## Contributing
+
 Fork the repo
+
 ```
 git clone <forked-repo>
 git checkout -b <new-feature>
@@ -98,4 +108,5 @@ git add <changed-file>
 git commit -m "new feature"
 git push origin <new-feature>
 ```
+
 then submit a pull request

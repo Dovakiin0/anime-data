@@ -310,33 +310,44 @@ class AnimeData {
 
   /**
    * Gets episode detail of an anime
-   * @param {string} slug - provide anime slug (e.g. "oregairu"), you can get slug from fetching anime details
+   * @param {string} slug - provide anime slug (e.g. "oregairu"), you can get slug from fetching getAnimeInfo
+   * @param {int} ep - provide episode number
    * @returns {Promise} returns object containing episode details
    */
-  async getEpisodeFix(slug) {
+  async getEpisodeFix(slug, ep) {
+    if (!ep) throw new Error("Episode Number Not Provided");
+    if (typeof ep !== "number") throw new Error("Episode needs to be a number");
     if (!slug) throw new Error("Slug Not Provided");
     try {
+      const { data } = await axios.get(
+        `${this.BASE_URI}/${slug}-episode-${ep}`
+      );
+      const $ = cheerio.load(data);
+      let link = $("li.dowloads").children("a").attr("href");
       const browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
-      await page.goto(`https://animeflix.city/movie/${slug}/`, {
+      await page.setUserAgent(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
+      );
+      await page.goto(link, {
         waitUntil: "networkidle2",
       });
-      // if ($("h2").text() == "ANIME LIST") {
-      //   throw new Error("No such episode found!");
-      // }
-
-      let data = await page.evaluate(() => {
-        let div_links = document.querySelectorAll("ul#episode_related li");
+      let animeEpLink = await page.evaluate(() => {
+        let div_links = document.querySelectorAll(".dowload");
         let links = [...div_links].map((el) => {
           return {
-            ep: el.querySelector("a").getAttribute("data-order"),
-            link: el.querySelector("a").getAttribute("data-src"),
+            ep: el.querySelector("a").getAttribute("href"),
+            title: el
+              .querySelector("a")
+              .text.replace(/Download/g, "")
+              .replace(/\n/g, "")
+              .trim(),
           };
         });
         return links;
       });
       await browser.close();
-      return data;
+      return animeEpLink;
     } catch (err) {
       console.error(err);
     }
@@ -345,7 +356,7 @@ class AnimeData {
 
 module.exports = AnimeData;
 
-// const ep = new AnimeData();
-// ep.getEpisodeFix("grand-blue")
-//   .then((res) => console.log(res))
-//   .catch((err) => console.log(err));
+const ep = new AnimeData();
+ep.getEpisodeFix("isekai-yakkyoku", 1)
+  .then((data) => console.log(data))
+  .catch((err) => console.error(err));
