@@ -355,8 +355,3 @@ class AnimeData {
 }
 
 module.exports = AnimeData;
-
-const ep = new AnimeData();
-ep.getEpisodeFix("isekai-yakkyoku", 1)
-  .then((data) => console.log(data))
-  .catch((err) => console.error(err));
